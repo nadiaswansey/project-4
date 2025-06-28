@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaRun - Game Design Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px;
+            background: linear-gradient(135deg, #00A8E6, #004B87);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 3.2em;
+            margin-bottom: 15px;
+            font-weight: 300;
+            letter-spacing: -1px;
+        }
+        
+        .subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+        
+        .project-brief {
+            font-size: 1.1em;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #FFD700;
+            backdrop-filter: blur(10px);
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .section {
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e9ecef;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .section h2 {
+            color: #004B87;
+            margin-bottom: 25px;
+            font-size: 1.6em;
+            font-weight: 600;
+            border-bottom: 2px solid #00A8E6;
+            padding-bottom: 12px;
+        }
+        
+        .wireframe-container {
+            grid-column: 1 / -1;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e9ecef;
+        }
+        
+        .wireframe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 30px;
+        }
+        
+        .phone-mockup {
+            width: 280px;
+            height: 500px;
+            border: 3px solid #333;
+            border-radius: 25px;
+            background: #000;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            background: #f8f9fa;
+            border-radius: 22px;
+            margin: 0;
+        }
+        
+        .mock-header {
+            background: linear-gradient(135deg, #00A8E6, #004B87);
+            color: white;
+            padding: 18px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+        
+        .mock-game-area {
+            background: linear-gradient(180deg, #87CEEB 0%, #4682B4 100%);
+            height: 200px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            position: relative;
+            border: 2px solid #00A8E6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .mock-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .mock-stat {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9em;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .stat-value {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #004B87;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.8em;
+            color: #6c757d;
+            margin-top: 4px;
+        }
+        
+        .mock-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: auto;
+        }
+        
+        .mock-btn {
+            background: #00A8E6;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9em;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .mock-rewards {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #333;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 0.9em;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 15px 0;
+            border-bottom: 1px solid #e9ecef;
+            position: relative;
+            padding-left: 25px;
+            font-size: 1.05em;
+        }
+        
+        .feature-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            top: 15px;
+            color: #00A8E6;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+        
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .game-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .flow-step {
+            background: linear-gradient(135deg, #00A8E6, #004B87);
+            color: white;
+            padding: 25px 20px;
+            border-radius: 12px;
+            text-align: center;
+            flex: 1;
+            min-width: 160px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 168, 230, 0.3);
+        }
+        
+        .flow-arrow {
+            font-size: 2em;
+            color: #00A8E6;
+            font-weight: bold;
+        }
+        
+        .mechanics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .mechanic-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid #00A8E6;
+            transition: transform 0.2s ease;
+        }
+        
+        .mechanic-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .mechanic-title {
+            font-weight: 600;
+            color: #004B87;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .rewards-showcase {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            padding: 30px;
+            border-radius: 12px;
+            margin: 25px 0;
+            color: #333;
+        }
+        
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .reward-item {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #28A745, #20C997);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .technical-specs {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #dee2e6;
+            margin: 20px 0;
+        }
+        
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .spec-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .spec-label {
+            font-weight: 600;
+            color: #004B87;
+            margin-bottom: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .wireframe-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-flow {
+                flex-direction: column;
+            }
+            
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AquaRun</h1>
+            <p class="subtitle">Endless Runner Mobile Game for charity: water</p>
+            <div class="project-brief">
+                <strong>Project Mission:</strong> Design an engaging endless runner mobile game that connects college students 
+                with charity: water's mission through fun gameplay mechanics while offering campus-based rewards to increase 
+                participation and awareness about global water access challenges.
+            </div>
+        </div>
+        
+        <div class="wireframe-container">
+            <h2 style="color: #004B87; text-align: center; margin-bottom: 25px;">Game Screen Wireframes</h2>
+            <div class="wireframe-grid">
+                <div>
+                    <h3 style="text-align: center; margin-bottom: 20px; color: #00A8E6; font-weight: 600;">Main Game Screen</h3>
+                    <div class="phone-mockup">
+                        <div class="phone-screen">
+                            <div class="mock-header">AquaRun</div>
+                            <div class="mock-game-area">
+                                RUNNER GAME AREA<br>
+                                Character Running Through Desert<br>
+                                Collecting Water Drops
+                            </div>
+                            <div class="mock-stats">
+                                <div class="mock-stat">
+                                    <span class="stat-value">2,450</span>
+                                    <div class="stat-label">Distance</div>
+                                </div>
+                                <div class="mock-stat">
+                                    <span class="stat-value">187</span>
+                                    <div class="stat-label">Water Drops</div>
+                                </div>
+                                <div class="mock-stat">
+                                    <span class="stat-value">15</span>
+                                    <div class="stat-label">Lives</div>
+                                </div>
+                            </div>
+                            <div class="mock-buttons">
+                                <div class="mock-btn">Jump</div>
+                                <div class="mock-btn">Slide</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 style="text-align: center; margin-bottom: 20px; color: #00A8E6; font-weight: 600;">Menu & Upgrades</h3>
+                    <div class="phone-mockup">
+                        <div class="phone-screen">
+                            <div class="mock-header">Character Upgrades</div>
+                            <div style="background: white; border: 2px solid #00A8E6; border-radius: 10px; padding: 20px; margin: 15px 0; text-align: center;">
+                                <div style="font-weight: bold; margin-bottom: 10px;">Current Character</div>
+                                <div style="background: #f8f9fa; height: 80px; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px solid #dee2e6;">
+                                    Character Avatar
+                                </div>
+                            </div>
+                            <div style="display: grid; gap: 10px;">
+                                <div style="background: #28A745; color: white; padding: 12px; border-radius: 8px; font-size: 0.9em; text-align: center;">
+                                    Speed Boost Available<br>
+                                    <small>Cost: 50 Water Drops</small>
+                                </div>
+                                <div style="background: #17a2b8; color: white; padding: 12px; border-radius: 8px; font-size: 0.9em; text-align: center;">
+                                    Extra Life<br>
+                                    <small>Cost: 30 Water Drops</small>
+                                </div>
+                                <div style="background: #6c757d; color: white; padding: 12px; border-radius: 8px; font-size: 0.9em; text-align: center;">
+                                    Magnet Power<br>
+                                    <small>Cost: 75 Water Drops</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 style="text-align: center; margin-bottom: 20px; color: #00A8E6; font-weight: 600;">Campus Rewards</h3>
+                    <div class="phone-mockup">
+                        <div class="phone-screen">
+                            <div class="mock-header">Your Campus Rewards</div>
+                            <div class="mock-rewards">
+                                Total Points: 1,240
+                            </div>
+                            <div style="display: grid; gap: 12px;">
+                                <div style="background: #28A745; color: white; padding: 15px; border-radius: 8px; font-size: 0.9em;">
+                                    <div style="font-weight: bold;">Cafeteria 15% Discount</div>
+                                    <small>Cost: 200 points • Available Now</small>
+                                </div>
+                                <div style="background: #ffc107; color: #333; padding: 15px; border-radius: 8px; font-size: 0.9em;">
+                                    <div style="font-weight: bold;">Coffee Shop Free Drink</div>
+                                    <small>Cost: 300 points • Need 60 more</small>
+                                </div>
+                                <div style="background: #17a2b8; color: white; padding: 15px; border-radius: 8px; font-size: 0.9em;">
+                                    <div style="font-weight: bold;">Library Priority Booking</div>
+                                    <small>Cost: 500 points • Need 260 more</small>
+                                </div>
+                                <div style="background: #6c757d; color: white; padding: 15px; border-radius: 8px; font-size: 0.9em;">
+                                    <div style="font-weight: bold;">Gym Day Pass</div>
+                                    <small>Cost: 750 points • Need 510 more</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-grid">
+            <div class="section">
+                <h2>Game Concept Overview</h2>
+                <p><strong>AquaRun</strong> is an endless runner mobile game where players navigate a character through various landscapes, collecting water drops and overcoming obstacles. The game teaches players about water scarcity while providing engaging gameplay that rewards real-world campus benefits.</p>
+                
+                <div class="highlight-box">
+                    <h3>Core Mission</h3>
+                    Combine addictive endless runner mechanics with educational content about water access challenges, 
+                    motivating college students through campus-based reward systems.
+                </div>
+                
+                <div class="game-flow">
+                    <div class="flow-step">Start Running<br>Choose Character</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">Collect Water<br>Avoid Obstacles</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">Earn Points<br>Complete Missions</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">Redeem Rewards<br>Campus Benefits</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Target Audience Analysis</h2>
+                <ul class="feature-list">
+                    <li><strong>Primary Users:</strong> College students aged 18-24 at participating universities</li>
+                    <li><strong>Gaming Preferences:</strong> Quick, accessible mobile games playable between classes</li>
+                    <li><strong>Session Length:</strong> 3-8 minute gameplay sessions during breaks</li>
+                    <li><strong>Motivation Factors:</strong> Competition, achievement unlocking, tangible rewards</li>
+                    <li><strong>Social Elements:</strong> Leaderboards, sharing achievements, team challenges</li>
+                    <li><strong>Device Usage:</strong> Primarily smartphone-based, portrait orientation preferred</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="main-grid">
+            <div class="section">
+                <h2>Core Game Mechanics</h2>
+                <div class="mechanics-grid">
+                    <div class="mechanic-card">
+                        <div class="mechanic-title">Endless Running</div>
+                        Character automatically runs forward through procedurally generated landscapes including deserts, cities, and rural areas
+                    </div>
+                    <div class="mechanic-card">
+                        <div class="mechanic-title">Obstacle Navigation</div>
+                        Swipe and tap controls for jumping over barriers, sliding under obstacles, and changing lanes
+                    </div>
+                    <div class="mechanic-card">
+                        <div class="mechanic-title">Water Drop Collection</div>
+                        Primary currency collected during runs, representing water saved or distributed to communities
+                    </div>
+                    <div class="mechanic-card">
+                        <div class="mechanic-title">Power-ups & Boosts</div>
+                        Temporary abilities like speed boost, magnet for water drops, and protective shields
+                    </div>
+                    <div class="mechanic-card">
+                        <div class="mechanic-title">Character Progression</div>
+                        Unlock new characters representing different charity: water team members and communities
+                    </div>
+                    <div class="mechanic-card">
+                        <div class="mechanic-title">Mission System</div>
+                        Daily and weekly challenges with specific objectives and bonus rewards
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Campus Integration Strategy</h2>
+                <div class="rewards-showcase">
+                    <h3 style="margin-bottom: 20px; text-align: center;">University Partnership Benefits</h3>
+                    <div class="rewards-grid">
+                        <div class="reward-item">Dining Hall Discounts<br>5-20% off meals</div>
+                        <div class="reward-item">Coffee Shop Rewards<br>Free drinks & pastries</div>
+                        <div class="reward-item">Library Services<br>Priority room booking</div>
+                        <div class="reward-item">Recreation Center<br>Guest passes & classes</div>
+                        <div class="reward-item">Campus Store<br>Merchandise discounts</div>
+                        <div class="reward-item">Event Access<br>Early ticket sales</div>
+                    </div>
+                </div>
+                
+                <h3>Point Conversion System:</h3>
+                <ul class="feature-list">
+                    <li><strong>Water Drops to Campus Points:</strong> 10 water drops = 1 campus point</li>
+                    <li><strong>Distance Bonuses:</strong> Bonus points for longer runs and milestone achievements</li>
+                    <li><strong>Daily Login Rewards:</strong> Consistent engagement bonuses</li>
+                    <li><strong>Social Multipliers:</strong> Extra points for team participation and referrals</li>
+                    <li><strong>Educational Bonuses:</strong> Points for completing water fact quizzes</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section full-width">
+            <h2>Technical Specifications</h2>
+            <div class="technical-specs">
+                <h3>Development Requirements</h3>
+                <div class="spec-grid">
+                    <div class="spec-item">
+                        <div class="spec-label">Platform</div>
+                        Web-based mobile game (HTML5, CSS3, JavaScript)
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Compatibility</div>
+                        iOS Safari, Android Chrome, responsive design
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Controls</div>
+                        Touch gestures: tap, swipe up/down, swipe left/right
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Performance</div>
+                        60 FPS target, optimized for mobile processors
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Storage</div>
+                        Local storage for progress, cloud sync for cross-device
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Audio</div>
+                        Background music, sound effects, optional audio cues
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
+                <div>
+                    <h3>Visual Design Elements</h3>
+                    <ul class="feature-list">
+                        <li>Clean, modern art style with charity: water brand colors</li>
+                        <li>Smooth animations and particle effects for water collection</li>
+                        <li>Diverse landscape backgrounds representing global communities</li>
+                        <li>Intuitive UI with clear progress indicators and feedback</li>
+                        <li>Accessibility features including colorblind-friendly design</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3>Educational Integration</h3>
+                    <ul class="feature-list">
+                        <li>Loading screen facts about water scarcity and solutions</li>
+                        <li>Character backstories highlighting real community impact</li>
+                        <li>Landscape changes reflecting different water access challenges</li>
+                        <li>Achievement descriptions connecting to charity: water projects</li>
+                        <li>Optional deeper content links for interested players</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-grid">
+            <div class="section">
+                <h2>User Engagement & Retention</h2>
+                <h3>Onboarding Experience:</h3>
+                <ol style="padding-left: 25px; margin: 20px 0;">
+                    <li>Quick tutorial demonstrating basic controls and objectives</li>
+                    <li>University registration for campus rewards access</li>
+                    <li>First character selection and customization options</li>
+                    <li>Explanation of charity: water connection and impact tracking</li>
+                    <li>Social features introduction and friend connections</li>
+                </ol>
+                
+                <h3>Long-term Engagement Features:</h3>
+                <ul class="feature-list">
+                    <li>Weekly tournaments between universities and organizations</li>
+                    <li>Seasonal events tied to World Water Day and awareness campaigns</li>
+                    <li>Progressive character unlocks with increasing difficulty</li>
+                    <li>Achievement system with meaningful milestone rewards</li>
+                    <li>Social sharing integration for personal bests and milestones</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2>Success Metrics & Analytics</h2>
+                <h3>Engagement Targets:</h3>
+                <ul class="feature-list">
+                    <li><strong>Daily Active Users:</strong> 35% of registered student base</li>
+                    <li><strong>Average Session Time:</strong> 6-10 minutes per gameplay session</li>
+                    <li><strong>Weekly Retention:</strong> 55% return rate after initial week</li>
+                    <li><strong>Campus Reward Redemption:</strong> 65% of earned points utilized</li>
+                    <li><strong>Social Engagement:</strong> 25% participation in team challenges</li>
+                </ul>
+                
+                <h3>Impact Measurement:</h3>
+                <ul class="feature-list">
+                    <li>Pre and post-game surveys measuring water crisis awareness</li>
+                    <li>Tracking of charity: water website visits from game links</li>
+                    <li>Donation conversion rates from engaged players</li>
+                    <li>Social media mentions and user-generated content volume</li>
+                    <li>Long-term engagement with water-related causes and events</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section full-width">
+            <h2>Development Timeline & Deliverables</h2>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 25px;">
+                <div class="mechanic-card">
+                    <div class="mechanic-title">Week 1: Design Foundation</div>
+                    <ul style="list-style: none; padding: 0; margin-top: 15px;">
+                        <li>• Game concept documentation</li>
+                        <li>• User interface wireframes</li>
+                        <li>• Campus partnership strategy</li>
+                        <li>• Technical requirements analysis</li>
+                        <li>• Visual design system creation</li>
+                    </ul>
+                </div>
+                <div class="mechanic-card">
+                    <div class="mechanic-title">Week 2: Core Development</div>
+                    <ul style="list-style: none; padding: 0; margin-top: 15px;">
+                        <li>• Basic runner mechanics implementation</li>
+                        <li>• Character movement and controls</li>
+                        <li>• Obstacle generation system</li>
+                        <li>• Water drop collection mechanics</li>
+                        <li>• Scoring and progress tracking</li>
+                    </ul>
+                </div>
+                <div class="mechanic-card">
+                    <div class="mechanic-title">Week 3: Polish & Integration</div>
+                    <ul style="list-style: none; padding: 0; margin-top: 15px;">
+                        <li>• Visual effects and animations</li>
+                        <li>• Campus rewards interface</li>
+                        <li>• charity: water branding integration</li>
+                        <li>• Performance optimization</li>
+                        <li>• Portfolio presentation preparation</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight-box" style="margin-top: 40px;">
+                <h3>Next Week Development Priorities</h3>
+                <p>Focus on building the core endless runner mechanics using JavaScript, including character movement, 
+                obstacle detection, and scoring systems. Create a playable prototype that demonstrates the fundamental 
+                gameplay loop and campus rewards integration concept.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
